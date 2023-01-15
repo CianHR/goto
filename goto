@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# The location of the saved directory
+save_dir=~/.goto_dir
+
+if [ "$1" == "set" ]; then
+    if [ -z "$2" ]; then
+        # Use the present working directory if no directory is provided
+        echo "Setting the saved directory to the present working directory"
+        pwd > $save_dir
+    else
+        if [ -d "$2" ]; then
+          echo "Setting the saved directory to '$2'"
+          echo "$2" > $save_dir
+        else
+          echo "Error: The directory $2 does not exist"
+        fi
+    fi
+else
+    if [ -f $save_dir ]; then
+        saved_dir=$(cat $save_dir)
+        if [ -d "$saved_dir" ]; then
+            cd "$saved_dir"
+        else
+            echo "Error: The saved directory $saved_dir does not exist"
+        fi
+    else
+        echo "Error: No saved directory found. Use set to set the directory."
+    fi
+fi
+
+$SHELL
+
